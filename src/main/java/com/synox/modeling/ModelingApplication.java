@@ -79,11 +79,13 @@ public class ModelingApplication implements CommandLineRunner {
 		cityRepo.saveAll(Arrays.asList(c1, c2, c3));
 		
 		Customer custom1 = new Customer(null, "ACC", "contact@austinacc.edu", CustomerType.COMPANY);
-		Address addr = new Address(null, "13400 Austin Gate", "Campus North", "14780", c3, custom1);
-		custom1.getAddresses().addAll(Arrays.asList(addr));
+		Address addr1 = new Address(null, "1555 Cypress Creek Rd", "Cedar Park", "78613", c3, custom1);
+		Address addr2 = new Address(null, "1200 Kohiers Crossing", "Kyle", "78640", c3, custom1);
+		custom1.getAddresses().addAll(Arrays.asList(addr1, addr2));
+		custom1.getPhones().addAll(Arrays.asList("+1 (512) 223-2000", "+1 (512) 262-6500"));
 		
 		customerRepo.save(custom1);
-		addressRepo.save(addr);
+		addressRepo.saveAll(Arrays.asList(addr1, addr2));
 	}
 
 }
