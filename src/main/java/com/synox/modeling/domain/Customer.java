@@ -53,11 +53,11 @@ public class Customer implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
+	public String getName() {
 		return name;
 	}
 
-	public void setNome(String nome) {
+	public void setName(String nome) {
 		this.name = nome;
 	}
 
@@ -69,27 +69,27 @@ public class Customer implements Serializable {
 		this.email = email;
 	}
 
-	public CustomerType getTipo() {
+	public CustomerType getType() {
 		return CustomerType.toEnum(customerType);
 	}
 
-	public void setTipo(CustomerType tipo) {
+	public void setType(CustomerType tipo) {
 		this.customerType = tipo.getCode();
 	}
 
-	public List<Address> getEnderecos() {
+	public List<Address> getAddresses() {
 		return addresses;
 	}
 
-	public void setEnderecos(List<Address> enderecos) {
+	public void setAddresses(List<Address> enderecos) {
 		this.addresses = enderecos;
 	}
 
-	public Set<String> getTelefones() {
+	public Set<String> getPhones() {
 		return phones;
 	}
 
-	public void setTelefones(Set<String> phones) {
+	public void setPhones(Set<String> phones) {
 		this.phones = phones;
 	}
 

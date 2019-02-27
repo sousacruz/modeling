@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.synox.modeling.domain.Address;
 import com.synox.modeling.domain.Category;
 import com.synox.modeling.domain.City;
+import com.synox.modeling.domain.Customer;
 import com.synox.modeling.domain.Product;
 import com.synox.modeling.domain.Province;
+import com.synox.modeling.domain.enums.CustomerType;
+import com.synox.modeling.repositories.AddressRepository;
 import com.synox.modeling.repositories.CategoryRepository;
 import com.synox.modeling.repositories.CityRepository;
+import com.synox.modeling.repositories.CustomerRepository;
 import com.synox.modeling.repositories.ProductRepository;
 import com.synox.modeling.repositories.ProvinceRepository;
 
@@ -30,6 +35,12 @@ public class ModelingApplication implements CommandLineRunner {
 	
 	@Autowired
 	private CityRepository cityRepo;
+	
+	@Autowired
+	private CustomerRepository customerRepo;
+	
+	@Autowired
+	private AddressRepository addressRepo;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ModelingApplication.class, args);
@@ -66,6 +77,13 @@ public class ModelingApplication implements CommandLineRunner {
 		
 		provinceRepo.saveAll(Arrays.asList(prov1, prov2));
 		cityRepo.saveAll(Arrays.asList(c1, c2, c3));
+		
+		Customer custom1 = new Customer(null, "ACC", "contact@austinacc.edu", CustomerType.COMPANY);
+		Address addr = new Address(null, "13400 Austin Gate", "Campus North", "14780", c3, custom1);
+		custom1.getAddresses().addAll(Arrays.asList(addr));
+		
+		customerRepo.save(custom1);
+		addressRepo.save(addr);
 	}
 
 }
