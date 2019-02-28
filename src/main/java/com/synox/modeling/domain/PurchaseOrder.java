@@ -2,6 +2,8 @@ package com.synox.modeling.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,12 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 @Entity
-@Table(name="ORDER_TBL")
-public class Order implements Serializable {
+public class PurchaseOrder implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -34,10 +35,13 @@ public class Order implements Serializable {
 	@JoinColumn(name="shipping_address_id")
 	private Address shippingAddress;
 	
-	public Order() {
+	@OneToMany(mappedBy="id.purchaseOrder")
+	private Set<PurchaseOrderItem> itens = new HashSet<>();
+	
+	public PurchaseOrder() {
 	}
 
-	public Order(Integer id, Date instant, Customer customer, Address shippingAddress) {
+	public PurchaseOrder(Integer id, Date instant, Customer customer, Address shippingAddress) {
 		super();
 		this.id = id;
 		this.instant = instant;
@@ -85,6 +89,14 @@ public class Order implements Serializable {
 		this.shippingAddress = shippingAddress;
 	}
 
+	public Set<PurchaseOrderItem> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<PurchaseOrderItem> itens) {
+		this.itens = itens;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -101,7 +113,7 @@ public class Order implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Order other = (Order) obj;
+		PurchaseOrder other = (PurchaseOrder) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

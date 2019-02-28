@@ -2,7 +2,9 @@ package com.synox.modeling.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -32,6 +35,9 @@ public class Product implements Serializable{
 	)
 	List<Category> categories = new ArrayList<>();
 	
+	@OneToMany(mappedBy="id.product")
+	private Set<PurchaseOrderItem> itens = new HashSet<>();
+	
 	public Product() {
 	}
 
@@ -42,6 +48,14 @@ public class Product implements Serializable{
 		this.price = price;
 	}
 
+	public List<PurchaseOrder> getOrders() {
+		List<PurchaseOrder> lst = new ArrayList<>();
+		for(PurchaseOrderItem i : itens) {
+			lst.add(i.getPurchaseOrder());
+		}
+		return lst;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -72,6 +86,14 @@ public class Product implements Serializable{
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	public Set<PurchaseOrderItem> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<PurchaseOrderItem> itens) {
+		this.itens = itens;
 	}
 
 	@Override

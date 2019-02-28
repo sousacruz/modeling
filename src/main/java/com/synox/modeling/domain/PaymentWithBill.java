@@ -16,7 +16,7 @@ public class PaymentWithBill extends Payment {
 	public PaymentWithBill() {
 	}
 
-	public PaymentWithBill(Integer id, PaymentStatus status, Order order, Date dueDate, Date paymentDate) {
+	public PaymentWithBill(Integer id, PaymentStatus status, PurchaseOrder order, Date dueDate, Date paymentDate) {
 		super(id, status, order);
 		this.dueDate = dueDate;
 		this.paymentDate = paymentDate;
