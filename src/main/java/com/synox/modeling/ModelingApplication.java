@@ -1,5 +1,6 @@
 package com.synox.modeling;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,20 @@ import com.synox.modeling.domain.Address;
 import com.synox.modeling.domain.Category;
 import com.synox.modeling.domain.City;
 import com.synox.modeling.domain.Customer;
+import com.synox.modeling.domain.Order;
+import com.synox.modeling.domain.Payment;
+import com.synox.modeling.domain.PaymentWithBill;
+import com.synox.modeling.domain.PaymentWithCard;
 import com.synox.modeling.domain.Product;
 import com.synox.modeling.domain.Province;
 import com.synox.modeling.domain.enums.CustomerType;
+import com.synox.modeling.domain.enums.PaymentStatus;
 import com.synox.modeling.repositories.AddressRepository;
 import com.synox.modeling.repositories.CategoryRepository;
 import com.synox.modeling.repositories.CityRepository;
 import com.synox.modeling.repositories.CustomerRepository;
+import com.synox.modeling.repositories.OrderRepository;
+import com.synox.modeling.repositories.PaymentRepository;
 import com.synox.modeling.repositories.ProductRepository;
 import com.synox.modeling.repositories.ProvinceRepository;
 
@@ -41,6 +49,12 @@ public class ModelingApplication implements CommandLineRunner {
 	
 	@Autowired
 	private AddressRepository addressRepo;
+	
+	@Autowired
+	private OrderRepository orderRepo;
+	
+	@Autowired
+	private PaymentRepository paymentRepo;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ModelingApplication.class, args);
@@ -86,6 +100,23 @@ public class ModelingApplication implements CommandLineRunner {
 		
 		customerRepo.save(custom1);
 		addressRepo.saveAll(Arrays.asList(addr1, addr2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Order o1 = new Order(null, sdf.parse("27/02/2019 11:47"), custom1, addr1);
+		Order o2 = new Order(null, sdf.parse("28/02/2019 14:17"), custom1, addr2);
+		
+		Payment pay1 = new PaymentWithCard(null, PaymentStatus.PAID, o1, 3);
+		o1.setPayment(pay1);
+		
+		Payment pay2 = new PaymentWithBill(null, PaymentStatus.OPEN, o2, sdf.parse("20/10/2019 00:00"), null);
+		o2.setPayment(pay2);
+		
+		custom1.getOrders().addAll(Arrays.asList(o1, o2));
+		
+		orderRepo.saveAll(Arrays.asList(o1, o2));
+		paymentRepo.saveAll(Arrays.asList(pay1, pay2));
+				
 	}
 
 }
