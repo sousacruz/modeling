@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.synox.modeling.domain.Category;
+import com.synox.modeling.dto.CategoryDTO;
 import com.synox.modeling.repositories.CategoryRepository;
 import com.synox.modeling.services.exception.DataIntegrityException;
 import com.synox.modeling.services.exception.ObjectNotFoundException;
@@ -54,6 +55,10 @@ public class CategoryService {
 		catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Unable to delete Category referenced by Products");
 		}
+	}
+	
+	public Category fromDTO(CategoryDTO objDto) {
+		return new Category(objDto.getId(), objDto.getName());
 	}
 	
 }
