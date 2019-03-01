@@ -14,7 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.synox.modeling.domain.enums.CustomerType;
 
 @Entity
@@ -28,7 +28,6 @@ public class Customer implements Serializable {
 	private String email;
 	private Integer customerType;
 	
-	@JsonManagedReference
 	@OneToMany(mappedBy="customer")
 	private List<Address> addresses = new ArrayList<>();
 	
@@ -36,6 +35,7 @@ public class Customer implements Serializable {
 	@CollectionTable(name="PHONE_NUMBER")
 	private Set<String> phones = new HashSet<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="customer")
 	private List<PurchaseOrder> orders = new ArrayList<>();
 	

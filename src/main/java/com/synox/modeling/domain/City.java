@@ -20,7 +20,6 @@ public class City implements Serializable {
 	private Integer id;
 	private String name;
 	
-	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "province_id")
 	private Province province;
