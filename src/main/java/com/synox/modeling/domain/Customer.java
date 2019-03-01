@@ -42,12 +42,12 @@ public class Customer implements Serializable {
 	public Customer() {
 	}
 
-	public Customer(Integer id, String name, String email, CustomerType tipo) {
+	public Customer(Integer id, String name, String email, CustomerType type) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.customerType = tipo.getCode();
+		this.customerType = (type == null) ? null : type.getCode();
 	}
 
 	public Integer getId() {
