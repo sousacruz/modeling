@@ -71,6 +71,18 @@ public class ModelingApplication implements CommandLineRunner {
 		
 		Category catInfo = new Category(null, "Info");
 		Category catOffice = new Category(null, "Office");
+		Category catBeauty = new Category(null, "Beauty");
+		Category catBooks = new Category(null, "Books");
+		Category catCamera = new Category(null, "Camera & Photo");
+		Category catPhones = new Category(null, "Cell Phones & Accessories");
+		Category catCoins = new Category(null, "Collectible Coins");
+		Category catElectron = new Category(null, "Consumer Electronics");
+		Category catEntertain = new Category(null, "Entertainment Collectibles");
+		Category catArt = new Category(null, "Fine Art");
+		Category catFood = new Category(null, "Grocery & Gourmet Food");
+		Category catHealth = new Category(null, "Health & Personal Care");
+		Category catHome = new Category(null, "Home & Garden");
+		Category catDesign = new Category(null, "Independent Design");
 		
 		Product prodComputer = new Product(null, "Computer", 2000.0);
 		Product prodPrinter = new Product(null, "Printer", 800.0);
@@ -83,7 +95,7 @@ public class ModelingApplication implements CommandLineRunner {
 		prodPrinter.getCategories().addAll(Arrays.asList(catInfo, catOffice));
 		prodMouse.getCategories().addAll(Arrays.asList(catInfo));
 		
-		categoryRepo.saveAll(Arrays.asList(catInfo, catOffice));
+		categoryRepo.saveAll(Arrays.asList(catArt, catBeauty, catBooks, catCamera, catCoins, catDesign, catElectron, catEntertain, catFood, catHealth, catHome, catInfo, catOffice));
 		productRepo.saveAll(Arrays.asList(prodComputer, prodPrinter, prodMouse));
 
 		Province provinceTX = new Province(null, "Texas", "TX");

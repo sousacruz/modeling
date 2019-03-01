@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.synox.modeling.domain.Category;
@@ -29,6 +32,10 @@ public class CategoryService {
 		return list;
 	}
 	
+	public Page<Category> findPage(Integer page, Integer size, String direction, String properties) {
+		return repo.findAll(PageRequest.of(page, size, Direction.valueOf(direction), properties));
+	}
+	
 	public Category insert(Category obj) {
 		obj.setId(null);
 		return repo.save(obj);
@@ -48,4 +55,5 @@ public class CategoryService {
 			throw new DataIntegrityException("Unable to delete Category referenced by Products");
 		}
 	}
+	
 }
