@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.synox.modeling.domain.Customer;
 import com.synox.modeling.dto.CustomerDTO;
+import com.synox.modeling.dto.CustomerNewDTO;
 import com.synox.modeling.services.CustomerService;
 
 @RestController
@@ -56,7 +57,7 @@ public class CustomerResource {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody CustomerDTO objDto) {
+	public ResponseEntity<Void> insert(@Valid @RequestBody CustomerNewDTO objDto) {
 		Customer obj = service.fromDTO(objDto);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()

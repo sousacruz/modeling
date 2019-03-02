@@ -9,9 +9,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.synox.modeling.domain.Address;
+import com.synox.modeling.domain.City;
 import com.synox.modeling.domain.Customer;
+import com.synox.modeling.domain.enums.CustomerType;
 import com.synox.modeling.dto.CustomerDTO;
+import com.synox.modeling.dto.CustomerNewDTO;
+import com.synox.modeling.repositories.AddressRepository;
+import com.synox.modeling.repositories.CityRepository;
 import com.synox.modeling.repositories.CustomerRepository;
 import com.synox.modeling.services.exception.DataIntegrityException;
 import com.synox.modeling.services.exception.ObjectNotFoundException;
@@ -21,6 +28,12 @@ public class CustomerService {
 
 	@Autowired
 	CustomerRepository repo;
+	
+	@Autowired
+	CityRepository cityRepo;
+	
+	@Autowired
+	AddressRepository addressRepo;
 	
 	public Customer findById(Integer id) {
 		Optional<Customer> obj = repo.findById(id);
@@ -37,9 +50,12 @@ public class CustomerService {
 		return repo.findAll(PageRequest.of(page, size, Direction.valueOf(direction), properties));
 	}
 	
+	@Transactional
 	public Customer insert(Customer obj) {
 		obj.setId(null);
-		return repo.save(obj);
+		repo.save(obj);
+		addressRepo.saveAll(obj.getAddresses());
+		return obj;
 	}
 	
 	public Customer update(Customer obj) {
@@ -67,4 +83,19 @@ public class CustomerService {
 		return new Customer(objDto.getId(), objDto.getName(), objDto.getEmail(), null);
 	}
 
+	public Customer fromDTO(CustomerNewDTO objDto) {
+		Customer customer = new Customer(null, objDto.getName(), objDto.getEmail(), CustomerType.toEnum(objDto.getCustomerType()));
+		System.out.println(objDto.getCityId());
+		City city = cityRepo.findById(objDto.getCityId()).orElse(null);
+		Address addr = new Address(null, objDto.getAddress(), objDto.getDetails(), objDto.getZipcode(), city, customer);
+		customer.getAddresses().add(addr);
+		customer.getPhones().add(objDto.getPhone1());
+		if (objDto.getPhone2() != null) {
+			customer.getPhones().add(objDto.getPhone2());
+		}
+		if (objDto.getPhone3() != null) {
+			customer.getPhones().add(objDto.getPhone3());
+		}
+		return customer;
+	}
 }
