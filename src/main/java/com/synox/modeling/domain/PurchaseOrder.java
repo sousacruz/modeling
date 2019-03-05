@@ -1,8 +1,11 @@
 package com.synox.modeling.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,7 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class PurchaseOrder implements Serializable {
@@ -108,6 +110,28 @@ public class PurchaseOrder implements Serializable {
 			sum = sum + i.getSubTotal();
 		}
 		return sum;
+	}
+	
+	@Override
+	public String toString() {
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		StringBuilder builder = new StringBuilder();
+		builder.append("Order number ");
+		builder.append(getId());
+		builder.append(", Instant: ");
+		builder.append(sdf.format(getInstant()));
+		builder.append(", Customer: ");
+		builder.append(getCustomer().getName());
+		builder.append(", Payment Status: ");
+		builder.append(getPayment().getStatus().getDescription());
+		builder.append("\nDetails:\n");
+		for (PurchaseOrderItem i : getItens()) {
+			builder.append(i.toString());
+		}
+		builder.append("Amount: ");
+		builder.append(nf.format(getAmount()));
+		return builder.toString();
 	}
 	
 	@Override
