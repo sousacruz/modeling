@@ -102,6 +102,14 @@ public class PurchaseOrder implements Serializable {
 		this.itens = itens;
 	}
 
+	public Double getAmount() {
+		Double sum = 0.0;
+		for (PurchaseOrderItem i : itens) {
+			sum = sum + i.getSubTotal();
+		}
+		return sum;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

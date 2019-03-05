@@ -87,9 +87,14 @@ public class ModelingApplication implements CommandLineRunner {
 		Product prodComputer = new Product(null, "Computer", 2000.0);
 		Product prodPrinter = new Product(null, "Printer", 800.0);
 		Product prodMouse = new Product(null, "Mouse", 80.0);
+		Product prodIPhone = new Product(null, "IPhone SE", 2800.0);
+		Product prodGalaxy = new Product(null, "Galaxy Fold", 1980.0);
+		Product prodMoto = new Product(null, "Motorola One", 1489.90);
+		
 		
 		catInfo.getProducts().addAll(Arrays.asList(prodComputer, prodPrinter, prodMouse));
 		catOffice.getProducts().addAll(Arrays.asList(prodPrinter));
+		catPhones.getProducts().addAll(Arrays.asList(prodIPhone, prodGalaxy, prodMoto));
 		
 		prodComputer.getCategories().addAll(Arrays.asList(catInfo));
 		prodPrinter.getCategories().addAll(Arrays.asList(catInfo, catOffice));

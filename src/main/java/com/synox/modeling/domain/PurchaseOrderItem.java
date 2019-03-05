@@ -36,10 +36,18 @@ public class PurchaseOrderItem implements Serializable {
 		return id.getPurchaseOrder();
 	}
 	
+	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+		id.setPurchaseOrder(purchaseOrder);
+	}
+	
 	public Product getProduct() {
 		return id.getProduct();
 	}
 
+	public void setProduct(Product product) {
+		id.setProduct(product);
+	}
+	
 	public PurchaseOrderItemKey getId() {
 		return id;
 	}
@@ -72,6 +80,10 @@ public class PurchaseOrderItem implements Serializable {
 		this.price = price;
 	}
 
+	public Double getSubTotal() {
+		return (price -  discount) * quantity;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
