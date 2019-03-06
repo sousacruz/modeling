@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +20,7 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.synox.modeling.domain.enums.CustomerType;
+import com.synox.modeling.domain.enums.UserProfile;
 
 @Entity
 public class Customer implements Serializable {
@@ -32,6 +35,9 @@ public class Customer implements Serializable {
 	private String email;
 	private Integer customerType;
 	
+	@JsonIgnore
+	private String password;
+	
 	@OneToMany(mappedBy="customer", cascade=CascadeType.ALL)
 	private List<Address> addresses = new ArrayList<>();
 	
@@ -39,19 +45,26 @@ public class Customer implements Serializable {
 	@CollectionTable(name="PHONE_NUMBER")
 	private Set<String> phones = new HashSet<>();
 	
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name="PROFILES")
+	private Set<Integer> profiles = new HashSet<>();
+	
 	@JsonIgnore
 	@OneToMany(mappedBy="customer")
 	private List<PurchaseOrder> orders = new ArrayList<>();
 	
 	public Customer() {
+		addProfile(UserProfile.USER);
 	}
 
-	public Customer(Integer id, String name, String email, CustomerType type) {
+	public Customer(Integer id, String name, String email, CustomerType type, String password) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.customerType = (type == null) ? null : type.getCode();
+		this.password = password;
+		addProfile(UserProfile.USER);
 	}
 
 	public Integer getId() {
@@ -86,6 +99,14 @@ public class Customer implements Serializable {
 		this.customerType = tipo.getCode();
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public List<Address> getAddresses() {
 		return addresses;
 	}
@@ -102,6 +123,14 @@ public class Customer implements Serializable {
 		this.phones = phones;
 	}
 
+	public Set<UserProfile> getProfiles() {
+		return profiles.stream().map(x -> UserProfile.toEnum(x)).collect(Collectors.toSet());
+	}
+
+	public void addProfile(UserProfile profile) {
+		profiles.add(profile.getCode());
+	}
+	
 	public List<PurchaseOrder> getOrders() {
 		return orders;
 	}

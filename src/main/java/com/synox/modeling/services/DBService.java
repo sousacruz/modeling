@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.synox.modeling.domain.Address;
@@ -20,6 +21,7 @@ import com.synox.modeling.domain.PurchaseOrder;
 import com.synox.modeling.domain.PurchaseOrderItem;
 import com.synox.modeling.domain.enums.CustomerType;
 import com.synox.modeling.domain.enums.PaymentStatus;
+import com.synox.modeling.domain.enums.UserProfile;
 import com.synox.modeling.repositories.AddressRepository;
 import com.synox.modeling.repositories.CategoryRepository;
 import com.synox.modeling.repositories.CityRepository;
@@ -32,6 +34,9 @@ import com.synox.modeling.repositories.PurchaseOrderRepository;
 
 @Service
 public class DBService {
+	
+	@Autowired
+	private BCryptPasswordEncoder pe;
 
 	@Autowired
 	private CategoryRepository categoryRepo;
@@ -110,14 +115,20 @@ public class DBService {
 		provinceRepo.saveAll(Arrays.asList(provinceTX, provinceFL));
 		cityRepo.saveAll(Arrays.asList(cityOrlando, cityTampa, cityAustin));
 		
-		Customer custACC = new Customer(null, "ACC", "contact@austinacc.edu", CustomerType.COMPANY);
+		Customer custACC = new Customer(null, "ACC", "contact@austinacc.edu", CustomerType.COMPANY, pe.encode("zaq1xsw2"));
+		Customer custHSC = new Customer(null, "Herbert", "herbert.cit@gmail.com", CustomerType.INDIVIDUAL, pe.encode("1qaz2wsx"));
 		Address addr78613 = new Address(null, "1555 Cypress Creek Rd", "Cedar Park", "78613", cityAustin, custACC);
 		Address addr78640 = new Address(null, "1200 Kohiers Crossing", "Kyle", "78640", cityAustin, custACC);
+		Address addr78701 = new Address(null, "1212 Rio Grande", null, "78701", cityAustin, custHSC);
+
 		custACC.getAddresses().addAll(Arrays.asList(addr78613, addr78640));
 		custACC.getPhones().addAll(Arrays.asList("+1 (512) 223-2000", "+1 (512) 262-6500"));
+		custHSC.getAddresses().addAll(Arrays.asList(addr78701));
+		custHSC.getPhones().addAll(Arrays.asList("+1 (512) 223-3000"));
+		custHSC.addProfile(UserProfile.ADMIN);
 		
-		customerRepo.save(custACC);
-		addressRepo.saveAll(Arrays.asList(addr78613, addr78640));
+		customerRepo.saveAll(Arrays.asList(custACC, custHSC));
+		addressRepo.saveAll(Arrays.asList(addr78613, addr78640, addr78701));
 		
 		PurchaseOrder order78613 = new PurchaseOrder(null, sdf.parse("27/02/2019 11:47"), custACC, addr78613);
 		PurchaseOrder order78640 = new PurchaseOrder(null, sdf.parse("28/02/2019 14:17"), custACC, addr78640);

@@ -2,6 +2,8 @@ package com.synox.modeling.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotEmpty;
+
 import com.synox.modeling.services.validation.CustomerInsert;
 
 @CustomerInsert
@@ -12,6 +14,10 @@ public class CustomerNewDTO implements Serializable {
 	private String email;
 	private Integer customerType;
 	
+	@NotEmpty(message="This field is required")
+	private String password;
+	
+	@NotEmpty(message="This field is required")
 	private String address;
 	private String details;
 	private String zipcode;
@@ -47,6 +53,14 @@ public class CustomerNewDTO implements Serializable {
 
 	public void setCustomerType(Integer customerType) {
 		this.customerType = customerType;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getAddress() {
